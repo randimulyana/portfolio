@@ -1,36 +1,52 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="csrf-token" content="{{ csrf_token() }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="scroll-smooth">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>{{ config('app.name', 'Laravel') }}</title>
+    {{-- ─── SEO Meta ─────────────────────────────────────────────── --}}
+    <title>{{ $title ?? config('app.name') }}</title>
+    <meta name="description" content="{{ $description ?? 'Portfolio seorang developer Laravel yang terus belajar dan berkembang.' }}">
+    <meta name="robots" content="index, follow">
 
-        <!-- Fonts -->
-        <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+    {{-- Open Graph --}}
+    <meta property="og:title"       content="{{ $title ?? config('app.name') }}">
+    <meta property="og:description" content="{{ $description ?? '' }}">
+    <meta property="og:type"        content="website">
+    <meta property="og:url"         content="{{ url()->current() }}">
+    @isset($ogImage)
+        <meta property="og:image" content="{{ $ogImage }}">
+    @endisset
 
-        <!-- Scripts -->
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
-    </head>
-    <body class="font-sans antialiased">
-        <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
-            <livewire:layout.navigation />
+    {{-- ─── Assets ──────────────────────────────────────────────── --}}
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 
-            <!-- Page Heading -->
-            @if (isset($header))
-                <header class="bg-white dark:bg-gray-800 shadow">
-                    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                        {{ $header }}
-                    </div>
-                </header>
-            @endif
+    {{-- ─── Livewire Styles ─────────────────────────────────────── --}}
+    @livewireStyles
 
-            <!-- Page Content -->
-            <main>
-                {{ $slot }}
-            </main>
-        </div>
-    </body>
+    {{-- ─── Slot head tambahan (per-halaman) ───────────────────── --}}
+    {{ $head ?? '' }}
+</head>
+
+<body class="bg-cream text-forest-800 antialiased">
+
+    {{-- Navbar --}}
+    <x-public.navbar />
+
+    {{-- Flash message --}}
+    @if (session('success'))
+        <x-ui.alert type="success" :message="session('success')" />
+    @endif
+
+    {{-- Main content --}}
+    <main>
+        {{ $slot }}
+    </main>
+
+    {{-- Footer --}}
+    <x-public.footer />
+
+    @livewireScripts
+</body>
 </html>

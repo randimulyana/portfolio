@@ -22,3 +22,12 @@
 Homestead.json
 Homestead.yaml
 Thumbs.db
+
+# IDE Helper files (generated, tidak perlu di-commit)
+_ide_helper.php
+_ide_helper_models.php
+.phpstorm.meta.php
+
+# OS files
+.DS_Store
+Thumbs.db

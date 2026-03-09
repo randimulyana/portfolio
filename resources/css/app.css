@@ -1,3 +1,147 @@
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=JetBrains+Mono:wght@400;500&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* ─── Base ─────────────────────────────────────────────────────────── */
+@layer base {
+    html {
+        scroll-behavior: smooth;
+        -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+        @apply bg-cream font-sans text-forest-800;
+    }
+
+    /* Heading pakai Instrument Serif — feel organik dan elegan */
+    h1, h2, h3, h4 {
+        @apply font-display;
+    }
+
+    /* Focus ring konsisten di seluruh aplikasi */
+    *:focus-visible {
+        @apply outline-none ring-2 ring-forest-400 ring-offset-2;
+    }
+}
+
+/* ─── Components ───────────────────────────────────────────────────── */
+@layer components {
+
+    /* Tombol utama */
+    .btn-primary {
+        @apply inline-flex items-center gap-2 px-5 py-2.5
+               bg-forest-500 text-white font-sans font-medium text-sm
+               rounded-xl transition-all duration-200
+               hover:bg-forest-600 hover:shadow-card
+               active:scale-[0.98]
+               focus-visible:ring-2 focus-visible:ring-forest-400;
+    }
+
+    .btn-secondary {
+        @apply inline-flex items-center gap-2 px-5 py-2.5
+               bg-white text-forest-700 font-sans font-medium text-sm
+               border border-mist-200 rounded-xl transition-all duration-200
+               hover:bg-mist-50 hover:border-forest-300
+               active:scale-[0.98];
+    }
+
+    .btn-ghost {
+        @apply inline-flex items-center gap-2 px-4 py-2
+               text-forest-600 font-sans font-medium text-sm
+               rounded-lg transition-all duration-200
+               hover:bg-mist-100 hover:text-forest-800;
+    }
+
+    .btn-danger {
+        @apply inline-flex items-center gap-2 px-4 py-2
+               text-red-600 font-sans font-medium text-sm
+               rounded-lg transition-all duration-200
+               hover:bg-red-50;
+    }
+
+    /* Card */
+    .card {
+        @apply bg-white rounded-xl2 border border-mist-100
+               shadow-soft transition-all duration-300;
+    }
+
+    .card-hover {
+        @apply card hover:shadow-hover hover:-translate-y-1;
+    }
+
+    /* Badge / Tag */
+    .badge {
+        @apply inline-flex items-center px-2.5 py-0.5
+               rounded-full text-xs font-medium font-sans;
+    }
+
+    .badge-forest  { @apply badge bg-mist-100 text-forest-700; }
+    .badge-rain    { @apply badge bg-rain-100 text-rain-700; }
+    .badge-amber   { @apply badge bg-amber-100 text-amber-700; }
+    .badge-emerald { @apply badge bg-emerald-100 text-emerald-700; }
+
+    /* Form Input */
+    .form-input {
+        @apply w-full rounded-xl border-sage-300 bg-white font-sans text-sm
+               text-forest-800 shadow-none
+               placeholder:text-sage-400
+               focus:border-forest-400 focus:ring-2 focus:ring-forest-100
+               transition-colors duration-150;
+    }
+
+    .form-label {
+        @apply block text-sm font-medium text-forest-700 mb-1.5 font-sans;
+    }
+
+    .form-error {
+        @apply mt-1.5 text-xs text-red-500 font-sans;
+    }
+
+    .form-hint {
+        @apply mt-1.5 text-xs text-sage-500 font-sans;
+    }
+
+    /* Divider */
+    .divider {
+        @apply border-t border-mist-200;
+    }
+
+    /* Section container */
+    .container-main {
+        @apply max-w-6xl mx-auto px-4 sm:px-6 lg:px-8;
+    }
+
+    /* Prose override untuk konten artikel */
+    .prose-portfolio {
+        @apply prose prose-lg max-w-prose-lg
+               prose-headings:font-display prose-headings:text-forest-800
+               prose-p:text-forest-700 prose-p:leading-relaxed
+               prose-a:text-rain-500 prose-a:no-underline
+               hover:prose-a:text-rain-600
+               prose-code:text-forest-600 prose-code:bg-mist-100
+               prose-code:rounded prose-code:px-1 prose-code:text-sm
+               prose-pre:bg-forest-900 prose-pre:text-mist-100
+               prose-blockquote:border-forest-400 prose-blockquote:text-sage-600;
+    }
+}
+
+/* ─── Utilities ────────────────────────────────────────────────────── */
+@layer utilities {
+    /* Staggered animation delays untuk list items */
+    .delay-75  { animation-delay: 75ms; }
+    .delay-150 { animation-delay: 150ms; }
+    .delay-225 { animation-delay: 225ms; }
+    .delay-300 { animation-delay: 300ms; }
+
+    /* Subtle noise texture overlay */
+    .texture-noise::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+        pointer-events: none;
+        border-radius: inherit;
+    }
+}

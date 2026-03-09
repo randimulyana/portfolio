@@ -26,3 +26,5 @@ Route::middleware(['auth', 'verified'])
         Route::resource('posts', \App\Http\Controllers\Admin\PostController::class);
 
     });
+
+    // require __DIR__.'/auth.php';

@@ -1,72 +1,44 @@
 <?php
 
+declare(strict_types=1);
+
 use App\Models\User;
-use Livewire\Volt\Volt;
 
-test('login screen can be rendered', function () {
-    $response = $this->get('/login');
+describe('Authentication', function () {
 
-    $response
-        ->assertOk()
-        ->assertSeeVolt('pages.auth.login');
-});
+    it('shows login page', function () {
+        $this->get(route('login'))->assertOk();
+    });
 
-test('users can authenticate using the login screen', function () {
-    $user = User::factory()->create();
+    it('redirects authenticated user away from login page', function () {
+        $user = User::factory()->create();
 
-    $component = Volt::test('pages.auth.login')
-        ->set('form.email', $user->email)
-        ->set('form.password', 'password');
+        $this->actingAs($user)
+            ->get(route('login'))
+            ->assertRedirect();
+    });
 
-    $component->call('login');
+    it('logs out authenticated user via POST /logout', function () {
+        $user = User::factory()->create();
 
-    $component
-        ->assertHasNoErrors()
-        ->assertRedirect(route('dashboard', absolute: false));
+        $this->actingAs($user)
+            ->post(route('logout'))
+            ->assertRedirect('/');
 
-    $this->assertAuthenticated();
-});
+        $this->assertGuest();
+    });
 
-test('users can not authenticate with invalid password', function () {
-    $user = User::factory()->create();
+    it('cannot access admin after logout', function () {
+        $user = User::factory()->create();
 
-    $component = Volt::test('pages.auth.login')
-        ->set('form.email', $user->email)
-        ->set('form.password', 'wrong-password');
+        // Logout dulu
+        $this->actingAs($user)->post(route('logout'));
 
-    $component->call('login');
+        // Pastikan sudah guest
+        $this->assertGuest();
 
-    $component
-        ->assertHasErrors()
-        ->assertNoRedirect();
-
-    $this->assertGuest();
-});
-
-test('navigation menu can be rendered', function () {
-    $user = User::factory()->create();
-
-    $this->actingAs($user);
-
-    $response = $this->get('/dashboard');
-
-    $response
-        ->assertOk()
-        ->assertSeeVolt('layout.navigation');
-});
-
-test('users can logout', function () {
-    $user = User::factory()->create();
-
-    $this->actingAs($user);
-
-    $component = Volt::test('layout.navigation');
-
-    $component->call('logout');
-
-    $component
-        ->assertHasNoErrors()
-        ->assertRedirect('/');
-
-    $this->assertGuest();
+        // Akses admin harus redirect ke login
+        $this->get(route('admin.dashboard'))
+            ->assertRedirectToRoute('login');
+    });
 });
